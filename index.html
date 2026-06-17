@@ -7,54 +7,115 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    margin-top:30px;
-    background:#f5f5f5;
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
 }
 
 .container{
-    display:inline-block;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 0 10px rgba(0,0,0,0.15);
+width:90%;
+max-width:1000px;
 }
 
-button{
-    width:140px;
-    height:60px;
-    font-size:18px;
-    margin:5px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
+.header{
+text-align:center;
+margin-bottom:25px;
 }
 
-.on{
-    background:#4CAF50;
-    color:white;
+.header h1{
+margin:0;
+font-size:38px;
 }
 
-.off{
-    background:#f44336;
-    color:white;
+.header p{
+color:#cbd5e1;
 }
 
-.all{
-    background:#2196F3;
-    color:white;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(10px);
+border-radius:20px;
+padding:25px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h2{
+margin-top:0;
+text-align:center;
 }
 
 .status-led{
-    font-size:22px;
-    font-weight:bold;
+display:block;
+text-align:center;
+font-size:24px;
+margin:15px 0;
+font-weight:bold;
 }
 
-#status{
-    margin-top:15px;
-    font-weight:bold;
+.btn-group{
+display:flex;
+gap:10px;
 }
+
+button{
+flex:1;
+border:none;
+border-radius:12px;
+padding:14px;
+font-size:16px;
+cursor:pointer;
+font-weight:bold;
+transition:0.2s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.on{
+background:#22c55e;
+color:white;
+}
+
+.off{
+background:#ef4444;
+color:white;
+}
+
+.all{
+background:#3b82f6;
+color:white;
+}
+
+.footer{
+margin-top:25px;
+text-align:center;
+}
+
+#mqttStatus{
+display:inline-block;
+padding:10px 20px;
+border-radius:50px;
+background:#1e293b;
+font-weight:bold;
+}
+
 </style>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -62,32 +123,71 @@ button{
 </head>
 
 <body>
-
 <div class="container">
 
-<h1>ESP32 LED Control</h1>
+```
+<div class="header">
+    <h1>🌡️ Smart Air Control</h1>
+    <p>ESP32 + MQTT + LoRa Dashboard</p>
+</div>
 
-<h3>LED 1 : <span id="led1" class="status-led">⚪ Unknown</span></h3>
-<button class="on" onclick="sendCmd('LED1_ON')">ON</button>
-<button class="off" onclick="sendCmd('LED1_OFF')">OFF</button>
+<div class="grid">
 
-<h3>LED 2 : <span id="led2" class="status-led">⚪ Unknown</span></h3>
-<button class="on" onclick="sendCmd('LED2_ON')">ON</button>
-<button class="off" onclick="sendCmd('LED2_OFF')">OFF</button>
+    <div class="card">
+        <h2>LED 1</h2>
+        <span id="led1" class="status-led">⚪ Unknown</span>
 
-<h3>LED 3 : <span id="led3" class="status-led">⚪ Unknown</span></h3>
-<button class="on" onclick="sendCmd('LED3_ON')">ON</button>
-<button class="off" onclick="sendCmd('LED3_OFF')">OFF</button>
+        <div class="btn-group">
+            <button class="on" onclick="sendCmd('LED1_ON')">ON</button>
+            <button class="off" onclick="sendCmd('LED1_OFF')">OFF</button>
+        </div>
+    </div>
 
-<hr>
+    <div class="card">
+        <h2>LED 2</h2>
+        <span id="led2" class="status-led">⚪ Unknown</span>
 
-<button class="all" onclick="sendCmd('ALL_ON')">ALL ON</button> <button class="all" onclick="sendCmd('ALL_OFF')">ALL OFF</button>
+        <div class="btn-group">
+            <button class="on" onclick="sendCmd('LED2_ON')">ON</button>
+            <button class="off" onclick="sendCmd('LED2_OFF')">OFF</button>
+        </div>
+    </div>
 
-<br><br>
+    <div class="card">
+        <h2>LED 3</h2>
+        <span id="led3" class="status-led">⚪ Unknown</span>
 
-<div id="status">กำลังเชื่อมต่อ MQTT...</div>
+        <div class="btn-group">
+            <button class="on" onclick="sendCmd('LED3_ON')">ON</button>
+            <button class="off" onclick="sendCmd('LED3_OFF')">OFF</button>
+        </div>
+    </div>
 
 </div>
+
+<div class="footer">
+
+    <br>
+
+    <button class="all" onclick="sendCmd('ALL_ON')">
+        ⚡ ALL ON
+    </button>
+
+    <button class="all" onclick="sendCmd('ALL_OFF')">
+        🔌 ALL OFF
+    </button>
+
+    <br><br>
+
+    <div id="mqttStatus">
+        🔄 Connecting MQTT...
+    </div>
+
+</div>
+```
+
+</div>
+
 
 <script>
 
