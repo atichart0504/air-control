@@ -1,34 +1,90 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Air Control</title>
+<title>ESP32 LED Control</title>
 
 <style>
 body{
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   text-align:center;
-  margin-top:50px;
+  margin-top:30px;
+  background:#f5f5f5;
+}
+
+h1{
+  color:#333;
+}
+
+.container{
+  display:inline-block;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 button{
-  width:150px;
-  height:70px;
-  font-size:24px;
-  margin:10px;
+  width:140px;
+  height:60px;
+  font-size:18px;
+  margin:5px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.on{
+  background:#4CAF50;
+  color:white;
+}
+
+.off{
+  background:#f44336;
+  color:white;
+}
+
+.all{
+  background:#2196F3;
+  color:white;
+}
+
+#status{
+  margin-top:15px;
+  font-weight:bold;
 }
 </style>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
 </head>
 
 <body>
 
-<h1>Air Control</h1>
+<div class="container">
 
-<button onclick="sendCmd('ON')">ON</button>
-<button onclick="sendCmd('OFF')">OFF</button>
+<h1>ESP32 LED Control</h1>
 
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<h3>LED 1</h3>
+<button class="on" onclick="sendCmd('LED1_ON')">ON</button>
+<button class="off" onclick="sendCmd('LED1_OFF')">OFF</button>
+
+<h3>LED 2</h3>
+<button class="on" onclick="sendCmd('LED2_ON')">ON</button>
+<button class="off" onclick="sendCmd('LED2_OFF')">OFF</button>
+
+<h3>LED 3</h3>
+<button class="on" onclick="sendCmd('LED3_ON')">ON</button>
+<button class="off" onclick="sendCmd('LED3_OFF')">OFF</button>
+
+<hr>
+
+<button class="all" onclick="sendCmd('ALL_ON')">ALL ON</button> <button class="all" onclick="sendCmd('ALL_OFF')">ALL OFF</button>
+
+<div id="status">กำลังเชื่อมต่อ MQTT...</div>
+
+</div>
 
 <script>
 
@@ -37,12 +93,24 @@ const client = mqtt.connect(
 );
 
 client.on('connect', () => {
-  console.log("MQTT Connected");
+  document.getElementById('status').innerHTML =
+    '🟢 MQTT Connected';
+});
+
+client.on('error', () => {
+  document.getElementById('status').innerHTML =
+    '🔴 MQTT Error';
 });
 
 function sendCmd(cmd){
-  client.publish('ono_air_2026/cmd', cmd);
-  alert('ส่งคำสั่ง ' + cmd);
+
+  client.publish(
+    'ono_air_2026/cmd',
+    cmd
+  );
+
+  document.getElementById('status').innerHTML =
+    'ส่งคำสั่ง : ' + cmd;
 }
 
 </script>
