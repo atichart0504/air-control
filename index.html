@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-
 <html>
+
 <head>
 <meta charset="UTF-8">
-<title>ESP32 LED Control</title>
+<title>Smart Air Control</title>
 
 <style>
+
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
@@ -19,7 +20,7 @@ color:#fff;
 
 .container{
 width:90%;
-max-width:1000px;
+max-width:1200px;
 }
 
 .header{
@@ -98,17 +99,12 @@ background:#ef4444;
 color:white;
 }
 
-.all{
-background:#3b82f6;
-color:white;
-}
-
 .footer{
 margin-top:25px;
 text-align:center;
 }
 
-#mqttStatus{
+#status{
 display:inline-block;
 padding:10px 20px;
 border-radius:50px;
@@ -123,63 +119,117 @@ font-weight:bold;
 </head>
 
 <body>
+
 <div class="container">
 
 <div class="header">
-    <h1>🌡️ Smart Air Control</h1>
-    <p>ESP32 + MQTT + LoRa Dashboard</p>
+<h1>🌡️ Smart Air Control</h1>
+<p>ESP32 + MQTT + LoRa Dashboard</p>
 </div>
 
 <div class="grid">
 
-    <div class="card">
-        <h2>LED 1</h2>
-        <span id="led1" class="status-led">⚪ Unknown</span>
+<!-- R1 LED1 -->
 
-        <div class="btn-group">
-            <button class="on" onclick="sendCmd('LED1_ON')">ON</button>
-            <button class="off" onclick="sendCmd('LED1_OFF')">OFF</button>
-        </div>
-    </div>
+<div class="card">
+<h2>R1 LED1</h2>
 
-    <div class="card">
-        <h2>LED 2</h2>
-        <span id="led2" class="status-led">⚪ Unknown</span>
+<span id="led1" class="status-led">
+⚪ Unknown
+</span>
 
-        <div class="btn-group">
-            <button class="on" onclick="sendCmd('LED2_ON')">ON</button>
-            <button class="off" onclick="sendCmd('LED2_OFF')">OFF</button>
-        </div>
-    </div>
+<div class="btn-group">
+<button class="on"
+onclick="sendCmd('R1|LED1_ON')">
+ON
+</button>
 
-    <div class="card">
-        <h2>LED 3</h2>
-        <span id="led3" class="status-led">⚪ Unknown</span>
+<button class="off"
+onclick="sendCmd('R1|LED1_OFF')">
+OFF
+</button>
+</div>
+</div>
 
-        <div class="btn-group">
-            <button class="on" onclick="sendCmd('LED3_ON')">ON</button>
-            <button class="off" onclick="sendCmd('LED3_OFF')">OFF</button>
-        </div>
-    </div>
+<!-- R1 LED2 -->
+
+<div class="card">
+<h2>R1 LED2</h2>
+
+<span id="led2" class="status-led">
+⚪ Unknown
+</span>
+
+<div class="btn-group">
+<button class="on"
+onclick="sendCmd('R1|LED2_ON')">
+ON
+</button>
+
+<button class="off"
+onclick="sendCmd('R1|LED2_OFF')">
+OFF
+</button>
+</div>
+</div>
+
+<!-- R1 LED3 -->
+
+<div class="card">
+<h2>R1 LED3</h2>
+
+<span id="led3" class="status-led">
+⚪ Unknown
+</span>
+
+<div class="btn-group">
+<button class="on"
+onclick="sendCmd('R1|LED3_ON')">
+ON
+</button>
+
+<button class="off"
+onclick="sendCmd('R1|LED3_OFF')">
+OFF
+</button>
+</div>
+</div>
+
+<!-- R2 -->
+
+<div class="card">
+<h2>R2 Output</h2>
+
+<span id="r2" class="status-led">
+⚪ Unknown
+</span>
+
+<div class="btn-group">
+<button class="on"
+onclick="sendCmd('R2|ON')">
+ON
+</button>
+
+<button class="off"
+onclick="sendCmd('R2|OFF')">
+OFF
+</button>
+</div>
+</div>
 
 </div>
 
 <div class="footer">
 
-    <br>
+<br><br>
 
-   
-
-    <br><br>
-
-    <div id="status">
-        🔄 Connecting MQTT...
-    </div>
-
+<div id="status">
+🔄 Connecting MQTT...
 </div>
 
 </div>
 
+</div>
 
 <script>
 
@@ -189,70 +239,90 @@ const client = mqtt.connect(
 
 client.on('connect', () => {
 
-    console.log('MQTT Connected');
+console.log('MQTT Connected');
 
-    document.getElementById('status').innerHTML =
-        '🟢 MQTT Connected';
+document.getElementById('status').innerHTML =
+'🟢 MQTT Connected';
 
-    client.subscribe('ono_air_2026/status/led1');
-    client.subscribe('ono_air_2026/status/led2');
-    client.subscribe('ono_air_2026/status/led3');
+client.subscribe('ono_air_2026/status/r1/led1');
+client.subscribe('ono_air_2026/status/r1/led2');
+client.subscribe('ono_air_2026/status/r1/led3');
+
+client.subscribe('ono_air_2026/status/r2');
+
 });
 
 client.on('message', (topic, message) => {
 
-    const value = message.toString();
+const value = message.toString();
 
-    console.log(topic, value);
+console.log(topic,value);
 
-    if(topic === 'ono_air_2026/status/led1'){
-        document.getElementById('led1').innerHTML =
-            value === 'ON' ? '🟢 ON' : '🔴 OFF';
-    }
+if(topic === 'ono_air_2026/status/r1/led1')
+{
+document.getElementById('led1').innerHTML =
+value === 'ON'
+? '🟢 ON'
+: '🔴 OFF';
+}
 
-    if(topic === 'ono_air_2026/status/led2'){
-        document.getElementById('led2').innerHTML =
-            value === 'ON' ? '🟢 ON' : '🔴 OFF';
-    }
+if(topic === 'ono_air_2026/status/r1/led2')
+{
+document.getElementById('led2').innerHTML =
+value === 'ON'
+? '🟢 ON'
+: '🔴 OFF';
+}
 
-    if(topic === 'ono_air_2026/status/led3'){
-        document.getElementById('led3').innerHTML =
-            value === 'ON' ? '🟢 ON' : '🔴 OFF';
-    }
+if(topic === 'ono_air_2026/status/r1/led3')
+{
+document.getElementById('led3').innerHTML =
+value === 'ON'
+? '🟢 ON'
+: '🔴 OFF';
+}
+
+if(topic === 'ono_air_2026/status/r2')
+{
+document.getElementById('r2').innerHTML =
+value === 'ON'
+? '🟢 ON'
+: '🔴 OFF';
+}
+
 });
 
 client.on('error', (err) => {
 
-    console.log('MQTT ERROR', err);
+console.log(err);
 
-    document.getElementById('status').innerHTML =
-        '🔴 MQTT Error';
+document.getElementById('status').innerHTML =
+'🔴 MQTT Error';
+
 });
 
 client.on('offline', () => {
 
-    console.log('MQTT OFFLINE');
+document.getElementById('status').innerHTML =
+'🟠 MQTT Offline';
 
-    document.getElementById('status').innerHTML =
-        '🟠 MQTT Offline';
 });
 
 client.on('reconnect', () => {
 
-    console.log('MQTT Reconnecting');
+document.getElementById('status').innerHTML =
+'🟡 MQTT Reconnecting';
 
-    document.getElementById('status').innerHTML =
-        '🟡 MQTT Reconnecting';
 });
 
-function sendCmd(cmd){
+function sendCmd(cmd)
+{
+client.publish(
+'ono_air_2026/cmd',
+cmd
+);
 
-    client.publish(
-        'ono_air_2026/cmd',
-        cmd
-    );
-
-    console.log('SEND', cmd);
+console.log('SEND',cmd);
 }
 
 </script>
