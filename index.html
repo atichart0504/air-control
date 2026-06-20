@@ -139,6 +139,8 @@ font-weight:bold;
 
 <div class="grid">
 
+<!-- R1 LED1 -->
+
 <div class="card">
 <h2>R1 LED1</h2>
 
@@ -151,6 +153,8 @@ font-weight:bold;
 <button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
 </div>
 </div>
+
+<!-- R1 LED2 -->
 
 <div class="card">
 <h2>R1 LED2</h2>
@@ -165,18 +169,21 @@ font-weight:bold;
 </div>
 </div>
 
-<div class="card">
-<h2>R1 LED3</h2>
+<!-- R1 TEMP -->
 
-<span id="led3" class="status-led">
-⚪ Unknown
+<div class="card">
+<h2>🌡 R1 Temperature</h2>
+
+<span id="temp_r1" class="temp-display">
+-- °C
 </span>
 
-<div class="btn-group">
-<button class="on" onclick="sendCmd('R1|LED3_ON')">ON</button>
-<button class="off" onclick="sendCmd('R1|LED3_OFF')">OFF</button>
+<p style="text-align:center;color:#cbd5e1;">
+DS18B20 Sensor
+</p>
 </div>
-</div>
+
+<!-- R2 OUTPUT -->
 
 <div class="card">
 <h2>R2 Output</h2>
@@ -190,6 +197,8 @@ font-weight:bold;
 <button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
 </div>
 </div>
+
+<!-- R2 TEMP -->
 
 <div class="card">
 <h2>🌡 R2 Temperature</h2>
@@ -232,10 +241,10 @@ document.getElementById('status').innerHTML =
 
 client.subscribe('ono_air_2026/status/r1/led1');
 client.subscribe('ono_air_2026/status/r1/led2');
-client.subscribe('ono_air_2026/status/r1/led3');
 
 client.subscribe('ono_air_2026/status/r2');
 
+client.subscribe('ono_air_2026/sensor/r1/temp');
 client.subscribe('ono_air_2026/sensor/r2/temp');
 
 });
@@ -244,7 +253,9 @@ client.on('message', (topic, message) => {
 
 const value = message.toString();
 
-console.log(topic,value);
+console.log(topic, value);
+
+// R1 LED1
 
 if(topic === 'ono_air_2026/status/r1/led1')
 {
@@ -254,6 +265,8 @@ value === 'ON'
 : '🔴 OFF';
 }
 
+// R1 LED2
+
 if(topic === 'ono_air_2026/status/r1/led2')
 {
 document.getElementById('led2').innerHTML =
@@ -262,13 +275,7 @@ value === 'ON'
 : '🔴 OFF';
 }
 
-if(topic === 'ono_air_2026/status/r1/led3')
-{
-document.getElementById('led3').innerHTML =
-value === 'ON'
-? '🟢 ON'
-: '🔴 OFF';
-}
+// R2 OUTPUT
 
 if(topic === 'ono_air_2026/status/r2')
 {
@@ -277,6 +284,16 @@ value === 'ON'
 ? '🟢 ON'
 : '🔴 OFF';
 }
+
+// R1 TEMP
+
+if(topic === 'ono_air_2026/sensor/r1/temp')
+{
+document.getElementById('temp_r1').innerHTML =
+'🌡 ' + value + ' °C';
+}
+
+// R2 TEMP
 
 if(topic === 'ono_air_2026/sensor/r2/temp')
 {
@@ -316,7 +333,7 @@ client.publish(
 cmd
 );
 
-console.log('SEND',cmd);
+console.log('SEND', cmd);
 }
 
 </script>
