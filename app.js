@@ -32,20 +32,20 @@ value === 'ON' ? '🟢 ON' : '🔴 OFF';
 // TEMP R1
 else if(topic === 'ono_air_2026/sensor/r1/temp'){
 document.getElementById('temp_r1').innerHTML = value + ' °C';
-setRoomColor('room1', value);
+setRoomColor('air1', value);
 }
 
 // TEMP R2
 else if(topic === 'ono_air_2026/sensor/r2/temp'){
 document.getElementById('temp_r2').innerHTML = value + ' °C';
-setRoomColor('room2', value);
+setRoomColor('air2', value);
 }
 
 // GATEWAY
 else if(topic === 'ono_air_2026/sensor/gateway/temp'){
 document.getElementById('temp_gateway').innerHTML =
 value;
-setRoomColor('room2', value);
+setRoomColor('room', value);
 }
 
 });
