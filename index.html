@@ -16,24 +16,11 @@ align-items:center;
 color:#fff;
 }
 
-.container{
-width:90%;
-max-width:1200px;
-}
+.container{width:90%;max-width:1200px;}
 
-.header{
-text-align:center;
-margin-bottom:25px;
-}
-
-.header h1{
-margin:0;
-font-size:38px;
-}
-
-.header p{
-color:#cbd5e1;
-}
+.header{text-align:center;margin-bottom:25px;}
+.header h1{margin:0;font-size:38px;}
+.header p{color:#cbd5e1;}
 
 .grid{
 display:grid;
@@ -50,14 +37,9 @@ box-shadow:0 10px 25px rgba(0,0,0,0.3);
 transition:0.3s;
 }
 
-.card:hover{
-transform:translateY(-5px);
-}
+.card:hover{transform:translateY(-5px);}
 
-.card h2{
-margin-top:0;
-text-align:center;
-}
+.card h2{text-align:center;margin-top:0;}
 
 .status-led{
 display:block;
@@ -92,24 +74,12 @@ font-weight:bold;
 transition:0.2s;
 }
 
-button:hover{
-transform:scale(1.05);
-}
+button:hover{transform:scale(1.05);}
 
-.on{
-background:#22c55e;
-color:white;
-}
+.on{background:#22c55e;color:white;}
+.off{background:#ef4444;color:white;}
 
-.off{
-background:#ef4444;
-color:white;
-}
-
-.footer{
-margin-top:25px;
-text-align:center;
-}
+.footer{text-align:center;margin-top:25px;}
 
 #status{
 display:inline-block;
@@ -134,23 +104,14 @@ font-weight:bold;
 
 <div class="grid">
 
-<!-- R1 LED1 -->
+<!-- R1 LED1 ONLY -->
 <div class="card">
 <h2>R1 LED1</h2>
 <span id="led1" class="status-led">⚪ Unknown</span>
+
 <div class="btn-group">
 <button class="on" onclick="sendCmd('R1|LED1_ON')">ON</button>
 <button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
-</div>
-</div>
-
-<!-- R1 LED2 -->
-<div class="card">
-<h2>R1 LED2</h2>
-<span id="led2" class="status-led">⚪ Unknown</span>
-<div class="btn-group">
-<button class="on" onclick="sendCmd('R1|LED2_ON')">ON</button>
-<button class="off" onclick="sendCmd('R1|LED2_OFF')">OFF</button>
 </div>
 </div>
 
@@ -172,6 +133,7 @@ font-weight:bold;
 <div class="card">
 <h2>R2 Output</h2>
 <span id="r2" class="status-led">⚪ Unknown</span>
+
 <div class="btn-group">
 <button class="on" onclick="sendCmd('R2|ON')">ON</button>
 <button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
@@ -202,7 +164,6 @@ client.on('connect', () => {
 document.getElementById('status').innerHTML = '🟢 MQTT Connected';
 
 client.subscribe('ono_air_2026/status/r1/led1');
-client.subscribe('ono_air_2026/status/r1/led2');
 client.subscribe('ono_air_2026/status/r2');
 
 client.subscribe('ono_air_2026/sensor/r1/temp');
@@ -219,12 +180,6 @@ console.log(topic, value);
 // R1 LED1
 if(topic === 'ono_air_2026/status/r1/led1'){
 document.getElementById('led1').innerHTML =
-value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-
-// R1 LED2
-else if(topic === 'ono_air_2026/status/r1/led2'){
-document.getElementById('led2').innerHTML =
 value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
