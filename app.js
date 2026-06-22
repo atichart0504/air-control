@@ -45,7 +45,6 @@ setRoomColor('air2', value);
 else if(topic === 'ono_air_2026/sensor/gateway/temp'){
 document.getElementById('temp_gateway').innerHTML =
 value;
-setRoomColor('room', value);
 }
 
 });
