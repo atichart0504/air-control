@@ -124,18 +124,23 @@ font-weight:bold;
 }
 .gateway-box {
   text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 20px;
+  margin-top: 15px;
+  padding: 10px 15px;   /* ลดจาก 20px */
+  border-radius: 15px;  /* ลดความโค้งนิดนึง */
   background: rgba(255,255,255,0.08);
-  border: 2px solid transparent;
+  border: 1px solid transparent; /* บางลง */
   transition: 0.5s;
 }
 
 .gateway-temp {
-  font-size: 36px;
+  font-size: 28px;  /* ลดจาก 36px */
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 5px;
+}
+
+.gateway-box h2 {
+  font-size: 18px; /* ทำหัวข้อเล็กลง */
+  margin: 0;
 }
 
 /* สีตามอุณหภูมิ */
