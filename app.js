@@ -90,7 +90,7 @@ function setGatewayColor(temp) {
 
   const t = parseFloat(temp);
 
-  if (t >= 21 && t <= 23.0) {
+  if (t >= 0 && t <= 23.0) {
     box.classList.add("green");
   } 
   else if (t >= 23.1 && t <= 25.9) {
