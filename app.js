@@ -73,10 +73,10 @@ function setRoomColor(roomId, temp) {
 
   const t = parseFloat(temp);
 
-  if (t >= 21 && t <= 23) {
+  if (t >= 21 && t <= 23.0) {
     el.classList.add("green");
   } 
-  else if (t >= 24 && t <= 25) {
+  else if (t >= 23.1 && t <= 25.9) {
     el.classList.add("yellow");
   } 
   else if (t >= 26) {
@@ -90,10 +90,10 @@ function setGatewayColor(temp) {
 
   const t = parseFloat(temp);
 
-  if (t >= 21 && t <= 23) {
+  if (t >= 21 && t <= 23.0) {
     box.classList.add("green");
   } 
-  else if (t >= 24 && t <= 25) {
+  else if (t >= 23.1 && t <= 25.9) {
     box.classList.add("yellow");
   } 
   else if (t >= 26) {
