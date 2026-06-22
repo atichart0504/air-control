@@ -31,14 +31,14 @@ value === 'ON' ? '🟢 ON' : '🔴 OFF';
 
 // TEMP R1
 else if(topic === 'ono_air_2026/sensor/r1/temp'){
-document.getElementById('temp_r1').innerHTML =
-value + ' °C';
+document.getElementById('temp_r1').innerHTML = value + ' °C';
+setRoomColor('room1', value);
 }
 
 // TEMP R2
 else if(topic === 'ono_air_2026/sensor/r2/temp'){
-document.getElementById('temp_r2').innerHTML =
-value + ' °C';
+document.getElementById('temp_r2').innerHTML = value + ' °C';
+setRoomColor('room2', value);
 }
 
 // GATEWAY
@@ -63,4 +63,22 @@ document.getElementById('status').innerHTML = "🟡 Reconnecting...";
 
 function sendCmd(cmd){
 client.publish('ono_air_2026/cmd', cmd);
+}
+function setRoomColor(roomId, temp) {
+  const el = document.getElementById(roomId);
+
+  // ล้างสีเก่าก่อน
+  el.classList.remove("green", "yellow", "red");
+
+  const t = parseFloat(temp);
+
+  if (t >= 21 && t <= 23) {
+    el.classList.add("green");
+  } 
+  else if (t >= 24 && t <= 25) {
+    el.classList.add("yellow");
+  } 
+  else if (t >= 26) {
+    el.classList.add("red");
+  }
 }
