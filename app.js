@@ -43,8 +43,9 @@ setRoomColor('air2', value);
 
 // GATEWAY
 else if(topic === 'ono_air_2026/sensor/gateway/temp'){
-document.getElementById('temp_gateway').innerHTML =
-value;
+  document.getElementById('temp_gateway').innerHTML = value + " °C";
+
+  setGatewayColor(value);
 }
 
 });
@@ -80,5 +81,22 @@ function setRoomColor(roomId, temp) {
   } 
   else if (t >= 26) {
     el.classList.add("red");
+  }
+}
+function setGatewayColor(temp) {
+  const box = document.getElementById("gatewayBox");
+
+  box.classList.remove("green", "yellow", "red");
+
+  const t = parseFloat(temp);
+
+  if (t >= 21 && t <= 23) {
+    box.classList.add("green");
+  } 
+  else if (t >= 24 && t <= 25) {
+    box.classList.add("yellow");
+  } 
+  else if (t >= 26) {
+    box.classList.add("red");
   }
 }
