@@ -4,61 +4,92 @@
 <meta charset="UTF-8">
 <title>Smart Air Control</title>
 
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 <style>
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
 background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
 min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-color:#fff;
 }
 
-.container{width:90%;max-width:1200px;}
-
-.header{text-align:center;margin-bottom:25px;}
-.header h1{margin:0;font-size:38px;}
-.header p{color:#cbd5e1;}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
+/* MAIN */
+.container{
+width:95%;
+max-width:1100px;
 }
 
-.card{
+/* HEADER */
+.header{
+text-align:center;
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0;
+font-size:36px;
+}
+
+.header p{
+color:#cbd5e1;
+}
+
+/* ROOM GRID */
+.rooms{
+display:flex;
+gap:25px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+/* BIG ROOM CARD */
+.room{
+flex:1;
+min-width:320px;
 background:rgba(255,255,255,0.08);
 backdrop-filter:blur(10px);
-border-radius:20px;
+border-radius:25px;
 padding:25px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
 transition:0.3s;
 }
 
-.card:hover{transform:translateY(-5px);}
-
-.card h2{text-align:center;margin-top:0;}
-
-.status-led{
-display:block;
-text-align:center;
-font-size:24px;
-margin:15px 0;
-font-weight:bold;
+.room:hover{
+transform:translateY(-5px);
 }
 
-.temp-display{
+.room h2{
+text-align:center;
+margin-bottom:15px;
+font-size:26px;
+}
+
+/* STATUS */
+.status{
 display:block;
 text-align:center;
-font-size:32px;
-margin:20px 0;
+font-size:26px;
+font-weight:bold;
+margin:10px 0;
+}
+
+/* TEMP */
+.temp{
+display:block;
+text-align:center;
+font-size:40px;
 font-weight:bold;
 color:#fbbf24;
+margin:20px 0;
 }
 
-.btn-group{
+/* BUTTONS */
+.btns{
 display:flex;
 gap:10px;
 }
@@ -74,12 +105,25 @@ font-weight:bold;
 transition:0.2s;
 }
 
-button:hover{transform:scale(1.05);}
+button:hover{
+transform:scale(1.05);
+}
 
-.on{background:#22c55e;color:white;}
-.off{background:#ef4444;color:white;}
+.on{
+background:#22c55e;
+color:white;
+}
 
-.footer{text-align:center;margin-top:25px;}
+.off{
+background:#ef4444;
+color:white;
+}
+
+/* STATUS BAR */
+.footer{
+margin-top:25px;
+text-align:center;
+}
 
 #status{
 display:inline-block;
@@ -90,67 +134,59 @@ font-weight:bold;
 }
 </style>
 
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 
 <body>
 
 <div class="container">
 
+<!-- HEADER -->
 <div class="header">
-<h1>🌡️ Smart Air Control</h1>
-<p>ESP32 + MQTT + LoRa Dashboard</p>
+<h1>🌡 Smart Air Control</h1>
+<p>Room Monitoring System</p>
 </div>
+<!-- GATEWAY TEMP -->
+<div style="text-align:center;margin-top:20px;">
+<h3>🌡 อุณหภูมิห้องขณะนี้: <span id="temp_gateway">--</span> °C</h3>
+</div>
+<!-- ROOMS -->
+<div class="rooms">
 
-<div class="grid">
+<!-- ROOM 1 -->
+<div class="room">
+<h2>แอร์ตัวที่ 1</h2>
 
-<!-- R1 LED1 ONLY -->
-<div class="card">
-<h2>R1 LED1</h2>
-<span id="led1" class="status-led">⚪ Unknown</span>
+<span id="led1" class="status">⚪ OFF</span>
 
-<div class="btn-group">
+<div class="btns">
 <button class="on" onclick="sendCmd('R1|LED1_ON')">ON</button>
 <button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
 </div>
+
+<div class="temp" id="temp_r1">-- °C</div>
 </div>
 
-<!-- R1 TEMP -->
-<div class="card">
-<h2>🌡 R1 Temperature</h2>
-<span id="temp_r1" class="temp-display">-- °C</span>
-<p style="text-align:center;color:#cbd5e1;">DS18B20 Sensor</p>
-</div>
+<!-- ROOM 2 -->
+<div class="room">
+<h2>แอร์ตัวที่ 2</h2>
 
-<!-- GATEWAY TEMP -->
-<div class="card">
-<h2>🌡 Gateway Temperature</h2>
-<span id="temp_gateway" class="temp-display">-- °C</span>
-<p style="text-align:center;color:#cbd5e1;">ESP32 Gateway DS18B20</p>
-</div>
+<span id="r2" class="status">⚪ OFF</span>
 
-<!-- R2 OUTPUT -->
-<div class="card">
-<h2>R2 Output</h2>
-<span id="r2" class="status-led">⚪ Unknown</span>
-
-<div class="btn-group">
+<div class="btns">
 <button class="on" onclick="sendCmd('R2|ON')">ON</button>
 <button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
 </div>
-</div>
 
-<!-- R2 TEMP -->
-<div class="card">
-<h2>🌡 R2 Temperature</h2>
-<span id="temp_r2" class="temp-display">-- °C</span>
-<p style="text-align:center;color:#cbd5e1;">DS18B20 Sensor</p>
+<div class="temp" id="temp_r2">-- °C</div>
 </div>
 
 </div>
 
+
+
+<!-- STATUS -->
 <div class="footer">
-<br><br>
+<br>
 <div id="status">🔄 Connecting MQTT...</div>
 </div>
 
@@ -161,7 +197,8 @@ font-weight:bold;
 const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
 client.on('connect', () => {
-document.getElementById('status').innerHTML = '🟢 MQTT Connected';
+
+document.getElementById('status').innerHTML = "🟢 MQTT Connected";
 
 client.subscribe('ono_air_2026/status/r1/led1');
 client.subscribe('ono_air_2026/status/r2');
@@ -169,61 +206,58 @@ client.subscribe('ono_air_2026/status/r2');
 client.subscribe('ono_air_2026/sensor/r1/temp');
 client.subscribe('ono_air_2026/sensor/r2/temp');
 client.subscribe('ono_air_2026/sensor/gateway/temp');
+
 });
 
-client.on('message', (topic, message) => {
+client.on('message', (topic, msg) => {
 
-const value = message.toString();
+const value = msg.toString();
 
-console.log(topic, value);
-
-// R1 LED1
+/* ROOM 1 LED */
 if(topic === 'ono_air_2026/status/r1/led1'){
 document.getElementById('led1').innerHTML =
 value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
-// R2 OUTPUT
+/* ROOM 2 */
 else if(topic === 'ono_air_2026/status/r2'){
 document.getElementById('r2').innerHTML =
 value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
-// R1 TEMP
+/* TEMP R1 */
 else if(topic === 'ono_air_2026/sensor/r1/temp'){
 document.getElementById('temp_r1').innerHTML =
-'🌡 ' + value + ' °C';
+value + ' °C';
 }
 
-// R2 TEMP
+/* TEMP R2 */
 else if(topic === 'ono_air_2026/sensor/r2/temp'){
 document.getElementById('temp_r2').innerHTML =
-'🌡 ' + value + ' °C';
+value + ' °C';
 }
 
-// GATEWAY TEMP
+/* GATEWAY */
 else if(topic === 'ono_air_2026/sensor/gateway/temp'){
-document.getElementById('temp_gateway').innerHTML =
-'🌡 ' + value + ' °C';
+document.getElementById('temp_gateway').innerHTML = value;
 }
 
 });
 
 client.on('error', () => {
-document.getElementById('status').innerHTML = '🔴 MQTT Error';
+document.getElementById('status').innerHTML = "🔴 MQTT Error";
 });
 
 client.on('offline', () => {
-document.getElementById('status').innerHTML = '🟠 MQTT Offline';
+document.getElementById('status').innerHTML = "🟠 Offline";
 });
 
 client.on('reconnect', () => {
-document.getElementById('status').innerHTML = '🟡 Reconnecting...';
+document.getElementById('status').innerHTML = "🟡 Reconnecting...";
 });
 
 function sendCmd(cmd){
 client.publish('ono_air_2026/cmd', cmd);
-console.log('SEND:', cmd);
 }
 
 </script>
