@@ -122,3 +122,34 @@ font-weight:bold;
   background: rgba(239, 68, 68, 0.25);
   border: 2px solid #ef4444;
 }
+.gateway-box {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid transparent;
+  transition: 0.5s;
+}
+
+.gateway-temp {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* สีตามอุณหภูมิ */
+.gateway-box.green {
+  background: rgba(34, 197, 94, 0.15);
+  border: 2px solid #22c55e;
+}
+
+.gateway-box.yellow {
+  background: rgba(250, 204, 21, 0.15);
+  border: 2px solid #facc15;
+}
+
+.gateway-box.red {
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid #ef4444;
+}
