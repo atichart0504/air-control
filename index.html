@@ -4,157 +4,24 @@
 <meta charset="UTF-8">
 <title>Smart Air Control</title>
 
+<link rel="stylesheet" href="style.css">
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-
-<style>
-body{
-margin:0;
-font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-/* MAIN */
-.container{
-width:95%;
-max-width:1100px;
-}
-
-/* HEADER */
-.header{
-text-align:center;
-margin-bottom:20px;
-}
-
-.header h1{
-margin:0;
-font-size:36px;
-}
-
-.header p{
-color:#cbd5e1;
-}
-
-/* ROOM GRID */
-.rooms{
-display:flex;
-gap:25px;
-justify-content:center;
-flex-wrap:wrap;
-}
-
-/* BIG ROOM CARD */
-.room{
-flex:1;
-min-width:320px;
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(10px);
-border-radius:25px;
-padding:25px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-transition:0.3s;
-}
-
-.room:hover{
-transform:translateY(-5px);
-}
-
-.room h2{
-text-align:center;
-margin-bottom:15px;
-font-size:26px;
-}
-
-/* STATUS */
-.status{
-display:block;
-text-align:center;
-font-size:26px;
-font-weight:bold;
-margin:10px 0;
-}
-
-/* TEMP */
-.temp{
-display:block;
-text-align:center;
-font-size:40px;
-font-weight:bold;
-color:#fbbf24;
-margin:20px 0;
-}
-
-/* BUTTONS */
-.btns{
-display:flex;
-gap:10px;
-}
-
-button{
-flex:1;
-border:none;
-border-radius:12px;
-padding:14px;
-font-size:16px;
-cursor:pointer;
-font-weight:bold;
-transition:0.2s;
-}
-
-button:hover{
-transform:scale(1.05);
-}
-
-.on{
-background:#22c55e;
-color:white;
-}
-
-.off{
-background:#ef4444;
-color:white;
-}
-
-/* STATUS BAR */
-.footer{
-margin-top:25px;
-text-align:center;
-}
-
-#status{
-display:inline-block;
-padding:10px 20px;
-border-radius:50px;
-background:#1e293b;
-font-weight:bold;
-}
-</style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<!-- HEADER -->
 <div class="header">
 <h1>🌡 Smart Air Control</h1>
 <p>Room Monitoring System</p>
 </div>
-<!-- GATEWAY TEMP -->
-<div style="text-align:center;margin-top:20px;">
-<h2>🌡 อุณหภูมิห้องขณะนี้: <span id="temp_gateway">--</span> °C</h2>
-</div>
-<!-- ROOMS -->
+
 <div class="rooms">
 
 <!-- ROOM 1 -->
 <div class="room">
-<h2>แอร์ตัวที่ 1</h2>
+<h2>ห้อง 1</h2>
 
 <span id="led1" class="status">⚪ OFF</span>
 
@@ -168,7 +35,7 @@ font-weight:bold;
 
 <!-- ROOM 2 -->
 <div class="room">
-<h2>แอร์ตัวที่ 2</h2>
+<h2>ห้อง 2</h2>
 
 <span id="r2" class="status">⚪ OFF</span>
 
@@ -182,9 +49,10 @@ font-weight:bold;
 
 </div>
 
+<div style="text-align:center;margin-top:20px;">
+<h3>🌡 Gateway: <span id="temp_gateway">--</span> °C</h3>
+</div>
 
-
-<!-- STATUS -->
 <div class="footer">
 <br>
 <div id="status">🔄 Connecting MQTT...</div>
@@ -192,75 +60,7 @@ font-weight:bold;
 
 </div>
 
-<script>
-
-const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
-
-client.on('connect', () => {
-
-document.getElementById('status').innerHTML = "🟢 MQTT Connected";
-
-client.subscribe('ono_air_2026/status/r1/led1');
-client.subscribe('ono_air_2026/status/r2');
-
-client.subscribe('ono_air_2026/sensor/r1/temp');
-client.subscribe('ono_air_2026/sensor/r2/temp');
-client.subscribe('ono_air_2026/sensor/gateway/temp');
-
-});
-
-client.on('message', (topic, msg) => {
-
-const value = msg.toString();
-
-/* ROOM 1 LED */
-if(topic === 'ono_air_2026/status/r1/led1'){
-document.getElementById('led1').innerHTML =
-value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-
-/* ROOM 2 */
-else if(topic === 'ono_air_2026/status/r2'){
-document.getElementById('r2').innerHTML =
-value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-
-/* TEMP R1 */
-else if(topic === 'ono_air_2026/sensor/r1/temp'){
-document.getElementById('temp_r1').innerHTML =
-value + ' °C';
-}
-
-/* TEMP R2 */
-else if(topic === 'ono_air_2026/sensor/r2/temp'){
-document.getElementById('temp_r2').innerHTML =
-value + ' °C';
-}
-
-/* GATEWAY */
-else if(topic === 'ono_air_2026/sensor/gateway/temp'){
-document.getElementById('temp_gateway').innerHTML = value;
-}
-
-});
-
-client.on('error', () => {
-document.getElementById('status').innerHTML = "🔴 MQTT Error";
-});
-
-client.on('offline', () => {
-document.getElementById('status').innerHTML = "🟠 Offline";
-});
-
-client.on('reconnect', () => {
-document.getElementById('status').innerHTML = "🟡 Reconnecting...";
-});
-
-function sendCmd(cmd){
-client.publish('ono_air_2026/cmd', cmd);
-}
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
