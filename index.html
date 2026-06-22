@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
 <meta charset="UTF-8">
 <title>Smart Air Control</title>
 
 <style>
-
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
@@ -121,11 +118,9 @@ border-radius:50px;
 background:#1e293b;
 font-weight:bold;
 }
-
 </style>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-
 </head>
 
 <body>
@@ -140,14 +135,9 @@ font-weight:bold;
 <div class="grid">
 
 <!-- R1 LED1 -->
-
 <div class="card">
 <h2>R1 LED1</h2>
-
-<span id="led1" class="status-led">
-⚪ Unknown
-</span>
-
+<span id="led1" class="status-led">⚪ Unknown</span>
 <div class="btn-group">
 <button class="on" onclick="sendCmd('R1|LED1_ON')">ON</button>
 <button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
@@ -155,14 +145,9 @@ font-weight:bold;
 </div>
 
 <!-- R1 LED2 -->
-
 <div class="card">
 <h2>R1 LED2</h2>
-
-<span id="led2" class="status-led">
-⚪ Unknown
-</span>
-
+<span id="led2" class="status-led">⚪ Unknown</span>
 <div class="btn-group">
 <button class="on" onclick="sendCmd('R1|LED2_ON')">ON</button>
 <button class="off" onclick="sendCmd('R1|LED2_OFF')">OFF</button>
@@ -170,28 +155,23 @@ font-weight:bold;
 </div>
 
 <!-- R1 TEMP -->
-
 <div class="card">
 <h2>🌡 R1 Temperature</h2>
+<span id="temp_r1" class="temp-display">-- °C</span>
+<p style="text-align:center;color:#cbd5e1;">DS18B20 Sensor</p>
+</div>
 
-<span id="temp_r1" class="temp-display">
--- °C
-</span>
-
-<p style="text-align:center;color:#cbd5e1;">
-DS18B20 Sensor
-</p>
+<!-- GATEWAY TEMP -->
+<div class="card">
+<h2>🌡 Gateway Temperature</h2>
+<span id="temp_gateway" class="temp-display">-- °C</span>
+<p style="text-align:center;color:#cbd5e1;">ESP32 Gateway DS18B20</p>
 </div>
 
 <!-- R2 OUTPUT -->
-<br>
 <div class="card">
 <h2>R2 Output</h2>
-
-<span id="r2" class="status-led">
-⚪ Unknown
-</span>
-
+<span id="r2" class="status-led">⚪ Unknown</span>
 <div class="btn-group">
 <button class="on" onclick="sendCmd('R2|ON')">ON</button>
 <button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
@@ -199,54 +179,35 @@ DS18B20 Sensor
 </div>
 
 <!-- R2 TEMP -->
-
 <div class="card">
 <h2>🌡 R2 Temperature</h2>
-
-<span id="temp_r2" class="temp-display">
--- °C
-</span>
-
-<p style="text-align:center;color:#cbd5e1;">
-DS18B20 Sensor
-</p>
+<span id="temp_r2" class="temp-display">-- °C</span>
+<p style="text-align:center;color:#cbd5e1;">DS18B20 Sensor</p>
 </div>
 
 </div>
 
 <div class="footer">
-
 <br><br>
-
-<div id="status">
-🔄 Connecting MQTT...
-</div>
-
+<div id="status">🔄 Connecting MQTT...</div>
 </div>
 
 </div>
 
 <script>
 
-const client = mqtt.connect(
-'wss://broker.hivemq.com:8884/mqtt'
-);
+const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
 client.on('connect', () => {
-
-console.log('MQTT Connected');
-
-document.getElementById('status').innerHTML =
-'🟢 MQTT Connected';
+document.getElementById('status').innerHTML = '🟢 MQTT Connected';
 
 client.subscribe('ono_air_2026/status/r1/led1');
 client.subscribe('ono_air_2026/status/r1/led2');
-
 client.subscribe('ono_air_2026/status/r2');
 
 client.subscribe('ono_air_2026/sensor/r1/temp');
 client.subscribe('ono_air_2026/sensor/r2/temp');
-
+client.subscribe('ono_air_2026/sensor/gateway/temp');
 });
 
 client.on('message', (topic, message) => {
@@ -256,84 +217,58 @@ const value = message.toString();
 console.log(topic, value);
 
 // R1 LED1
-
-if(topic === 'ono_air_2026/status/r1/led1')
-{
+if(topic === 'ono_air_2026/status/r1/led1'){
 document.getElementById('led1').innerHTML =
-value === 'ON'
-? '🟢 ON'
-: '🔴 OFF';
+value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
 // R1 LED2
-
-if(topic === 'ono_air_2026/status/r1/led2')
-{
+else if(topic === 'ono_air_2026/status/r1/led2'){
 document.getElementById('led2').innerHTML =
-value === 'ON'
-? '🟢 ON'
-: '🔴 OFF';
+value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
 // R2 OUTPUT
-
-if(topic === 'ono_air_2026/status/r2')
-{
+else if(topic === 'ono_air_2026/status/r2'){
 document.getElementById('r2').innerHTML =
-value === 'ON'
-? '🟢 ON'
-: '🔴 OFF';
+value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
 // R1 TEMP
-
-if(topic === 'ono_air_2026/sensor/r1/temp')
-{
+else if(topic === 'ono_air_2026/sensor/r1/temp'){
 document.getElementById('temp_r1').innerHTML =
 '🌡 ' + value + ' °C';
 }
 
 // R2 TEMP
-
-if(topic === 'ono_air_2026/sensor/r2/temp')
-{
+else if(topic === 'ono_air_2026/sensor/r2/temp'){
 document.getElementById('temp_r2').innerHTML =
+'🌡 ' + value + ' °C';
+}
+
+// GATEWAY TEMP
+else if(topic === 'ono_air_2026/sensor/gateway/temp'){
+document.getElementById('temp_gateway').innerHTML =
 '🌡 ' + value + ' °C';
 }
 
 });
 
-client.on('error', (err) => {
-
-console.log(err);
-
-document.getElementById('status').innerHTML =
-'🔴 MQTT Error';
-
+client.on('error', () => {
+document.getElementById('status').innerHTML = '🔴 MQTT Error';
 });
 
 client.on('offline', () => {
-
-document.getElementById('status').innerHTML =
-'🟠 MQTT Offline';
-
+document.getElementById('status').innerHTML = '🟠 MQTT Offline';
 });
 
 client.on('reconnect', () => {
-
-document.getElementById('status').innerHTML =
-'🟡 MQTT Reconnecting';
-
+document.getElementById('status').innerHTML = '🟡 Reconnecting...';
 });
 
-function sendCmd(cmd)
-{
-client.publish(
-'ono_air_2026/cmd',
-cmd
-);
-
-console.log('SEND', cmd);
+function sendCmd(cmd){
+client.publish('ono_air_2026/cmd', cmd);
+console.log('SEND:', cmd);
 }
 
 </script>
