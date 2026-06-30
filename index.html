@@ -24,37 +24,64 @@
 </div><br>
 <div class="rooms">
 
-<!-- ROOM 1 -->
 <div class="room" id="air1">
-<h2>ตัวที่ 1</h2>
+<h2>ตัวที่ 1 (R1)</h2>
 
-<span id="led1" class="status">⚪ OFF</span>
+<div class="control-group">
+  <span class="label">LED 1:</span>
+  <span id="led1" class="status">⚪ OFF</span>
+  <div class="btns">
+    <button class="on" onclick="sendCmd('R1|LED1_ON')">ON</button>
+    <button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
+  </div>
+</div>
 
-<div class="btns">
-<button class="on" onclick="sendCmd('R1|LED1_ON')">ON</button>
-<button class="off" onclick="sendCmd('R1|LED1_OFF')">OFF</button>
+<div class="control-group">
+  <span class="label">LED 2:</span>
+  <span id="led2" class="status">⚪ OFF</span>
+  <div class="btns">
+    <button class="on" onclick="sendCmd('R1|LED2_ON')">ON</button>
+    <button class="off" onclick="sendCmd('R1|LED2_OFF')">OFF</button>
+  </div>
+</div>
+
+<div class="control-group">
+  <span class="label">LED 3:</span>
+  <span id="led3" class="status">⚪ OFF</span>
+  <div class="btns">
+    <button class="on" onclick="sendCmd('R1|LED3_ON')">ON</button>
+    <button class="off" onclick="sendCmd('R1|LED3_OFF')">OFF</button>
+  </div>
+</div>
+
+<div class="control-group">
+  <span class="label">LED 4:</span>
+  <span id="led4" class="status">⚪ OFF</span>
+  <div class="btns">
+    <button class="on" onclick="sendCmd('R1|LED4_ON')">ON</button>
+    <button class="off" onclick="sendCmd('R1|LED4_OFF')">OFF</button>
+  </div>
 </div>
 
 <div class="temp" id="temp_r1">-- °C</div>
 </div>
 
-<!-- ROOM 2 -->
 <div class="room" id="air2">
-<h2>ตัวที่ 2</h2>
+<h2>ตัวที่ 2 (R2)</h2>
 
-<span id="r2" class="status">⚪ OFF</span>
-
-<div class="btns">
-<button class="on" onclick="sendCmd('R2|ON')">ON</button>
-<button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
+<div class="control-group">
+  <span class="label">Main Switch:</span>
+  <span id="r2" class="status">⚪ OFF</span>
+  <div class="btns">
+    <button class="on" onclick="sendCmd('R2|ON')">ON</button>
+    <button class="off" onclick="sendCmd('R2|OFF')">OFF</button>
+  </div>
 </div>
 
 <div class="temp" id="temp_r2">-- °C</div>
 </div>
 
 </div>
-
-
 
 <div class="footer">
 <br>
