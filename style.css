@@ -33,6 +33,7 @@ display:flex;
 gap:25px;
 justify-content:center;
 flex-wrap:wrap;
+align-items: flex-start;
 }
 
 .room{
@@ -52,15 +53,34 @@ transform:translateY(-5px);
 
 .room h2{
 text-align:center;
-margin-bottom:15px;
+margin-bottom:20px;
+border-bottom: 1px solid rgba(255,255,255,0.1);
+padding-bottom: 10px;
+}
+
+/* เพิ่มคลาสจัดแถวสำหรับปุ่มควบคุมและสถานะ */
+.control-group {
+background: rgba(0, 0, 0, 0.15);
+padding: 12px 15px;
+border-radius: 15px;
+margin-bottom: 12px;
+display: flex;
+flex-direction: column;
+gap: 5px;
+}
+
+.control-group .label {
+font-size: 14px;
+color: #94a3b8;
+font-weight: bold;
 }
 
 .status{
 display:block;
 text-align:center;
-font-size:26px;
+font-size:22px;
 font-weight:bold;
-margin:10px 0;
+margin:5px 0;
 }
 
 .temp{
@@ -69,7 +89,7 @@ text-align:center;
 font-size:40px;
 font-weight:bold;
 color:#fbbf24;
-margin:20px 0;
+margin:20px 0 5px 0;
 }
 
 .btns{
@@ -81,7 +101,7 @@ button{
 flex:1;
 border:none;
 border-radius:12px;
-padding:14px;
+padding:10px 14px;
 font-size:16px;
 cursor:pointer;
 font-weight:bold;
@@ -122,28 +142,28 @@ font-weight:bold;
   background: rgba(239, 68, 68, 0.25);
   border: 2px solid #ef4444;
 }
+
 .gateway-box {
   text-align: center;
   margin-top: 15px;
-  padding: 10px 15px;   /* ลดจาก 20px */
-  border-radius: 15px;  /* ลดความโค้งนิดนึง */
+  padding: 10px 15px;
+  border-radius: 15px;
   background: rgba(255,255,255,0.08);
-  border: 1px solid transparent; /* บางลง */
+  border: 1px solid transparent;
   transition: 0.5s;
 }
 
 .gateway-temp {
-  font-size: 28px;  /* ลดจาก 36px */
+  font-size: 28px;
   font-weight: bold;
   margin-top: 5px;
 }
 
 .gateway-box h2 {
-  font-size: 18px; /* ทำหัวข้อเล็กลง */
+  font-size: 18px;
   margin: 0;
 }
 
-/* สีตามอุณหภูมิ */
 .gateway-box.green {
   background: rgba(34, 197, 94, 0.15);
   border: 2px solid #22c55e;
