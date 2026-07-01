@@ -11,7 +11,10 @@ client.subscribe('ono_air_2026/status/r1/led3');
 client.subscribe('ono_air_2026/status/r1/led4');
 
 // Subscribe สถานะของ R2
-client.subscribe('ono_air_2026/status/r2');
+client.subscribe('ono_air_2026/status/r2/led1');
+client.subscribe('ono_air_2026/status/r2/led2');
+client.subscribe('ono_air_2026/status/r2/led3');
+client.subscribe('ono_air_2026/status/r2/led4');
 
 // Subscribe อุณหภูมิเซนเซอร์
 client.subscribe('ono_air_2026/sensor/r1/temp');
@@ -39,8 +42,17 @@ else if(topic === 'ono_air_2026/status/r1/led4'){
 }
 
 // --- ROOM 2 ---
-else if(topic === 'ono_air_2026/status/r2'){
-  document.getElementById('r2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+else if(topic === 'ono_air_2026/status/r2/led1'){
+  document.getElementById('r2_led1').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+}
+else if(topic === 'ono_air_2026/status/r2/led2'){
+  document.getElementById('r2_led2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+}
+else if(topic === 'ono_air_2026/status/r2/led3'){
+  document.getElementById('r2_led3').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+}
+else if(topic === 'ono_air_2026/status/r2/led4'){
+  document.getElementById('r2_led4').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
 }
 
 // --- TEMPERATURES ---
