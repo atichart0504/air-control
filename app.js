@@ -2,89 +2,117 @@ const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
 client.on('connect', () => {
 
-document.getElementById('status').innerHTML = "🟢 MQTT Connected";
+  document.getElementById('status').innerHTML = "🟢 MQTT Connected";
 
-// Subscribe สถานะของ R1 (LED1 - LED4)
-client.subscribe('ono_air_2026/status/r1/led1');
-client.subscribe('ono_air_2026/status/r1/led2');
-client.subscribe('ono_air_2026/status/r1/led3');
-client.subscribe('ono_air_2026/status/r1/led4');
+  // Subscribe สถานะของ R1 (LED1 - LED4)
+  client.subscribe('ono_air_2026/status/r1/led1');
+  client.subscribe('ono_air_2026/status/r1/led2');
+  client.subscribe('ono_air_2026/status/r1/led3');
+  client.subscribe('ono_air_2026/status/r1/led4');
 
-// Subscribe สถานะของ R2
-client.subscribe('ono_air_2026/status/r2/led1');
-client.subscribe('ono_air_2026/status/r2/led2');
-client.subscribe('ono_air_2026/status/r2/led3');
-client.subscribe('ono_air_2026/status/r2/led4');
+  // Subscribe สถานะของ R2
+  client.subscribe('ono_air_2026/status/r2/led1');
+  client.subscribe('ono_air_2026/status/r2/led2');
+  client.subscribe('ono_air_2026/status/r2/led3');
+  client.subscribe('ono_air_2026/status/r2/led4');
 
-// Subscribe อุณหภูมิเซนเซอร์
-client.subscribe('ono_air_2026/sensor/r1/temp');
-client.subscribe('ono_air_2026/sensor/r2/temp');
-client.subscribe('ono_air_2026/sensor/gateway/temp');
+  // Subscribe อุณหภูมิเซนเซอร์
+  client.subscribe('ono_air_2026/sensor/r1/temp');
+  client.subscribe('ono_air_2026/sensor/r2/temp');
+  client.subscribe('ono_air_2026/sensor/gateway/temp');
+
+  // ==========================================
+  // ➕ Subscribe สถานะการเชื่อมต่อของบอร์ดลูก (Online/Offline)
+  // ==========================================
+  client.subscribe('ono_air_2026/status/r1/connection');
+  client.subscribe('ono_air_2026/status/r2/connection');
 
 });
 
 client.on('message', (topic, msg) => {
 
-const value = msg.toString();
+  const value = msg.toString();
 
-// --- ROOM 1 (LED1 - LED4) ---
-if(topic === 'ono_air_2026/status/r1/led1'){
-  document.getElementById('led1').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r1/led2'){
-  document.getElementById('led2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r1/led3'){
-  document.getElementById('led3').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r1/led4'){
-  document.getElementById('led4').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
+  // ==========================================
+  // ⚡ ตรวจจับสถานะ ONLINE / OFFLINE ของบอร์ดลูก
+  // ==========================================
+  if (topic === 'ono_air_2026/status/r1/connection') {
+    if (value === 'ONLINE') {
+      document.getElementById('r1_conn').innerHTML = '🟢 Online';
+      document.getElementById('r1_conn').style.color = '#22c55e';
+    } else {
+      document.getElementById('r1_conn').innerHTML = '🔴 Offline';
+      document.getElementById('r1_conn').style.color = '#ef4444';
+    }
+  }
+  else if (topic === 'ono_air_2026/status/r2/connection') {
+    if (value === 'ONLINE') {
+      document.getElementById('r2_conn').innerHTML = '🟢 Online';
+      document.getElementById('r2_conn').style.color = '#22c55e';
+    } else {
+      document.getElementById('r2_conn').innerHTML = '🔴 Offline';
+      document.getElementById('r2_conn').style.color = '#ef4444';
+    }
+  }
 
-// --- ROOM 2 ---
-else if(topic === 'ono_air_2026/status/r2/led1'){
-  document.getElementById('r2_led1').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r2/led2'){
-  document.getElementById('r2_led2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r2/led3'){
-  document.getElementById('r2_led3').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
-else if(topic === 'ono_air_2026/status/r2/led4'){
-  document.getElementById('r2_led4').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
-}
+  // --- ROOM 1 (LED1 - LED4) ---
+  else if(topic === 'ono_air_2026/status/r1/led1'){
+    document.getElementById('led1').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r1/led2'){
+    document.getElementById('led2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r1/led3'){
+    document.getElementById('led3').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r1/led4'){
+    document.getElementById('led4').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
 
-// --- TEMPERATURES ---
-else if(topic === 'ono_air_2026/sensor/r1/temp'){
-  document.getElementById('temp_r1').innerHTML = value + ' °C';
-  setRoomColor('air1', value);
-}
-else if(topic === 'ono_air_2026/sensor/r2/temp'){
-  document.getElementById('temp_r2').innerHTML = value + ' °C';
-  setRoomColor('air2', value);
-}
-else if(topic === 'ono_air_2026/sensor/gateway/temp'){
-  document.getElementById('temp_gateway').innerHTML = value + " °C";
-  setGatewayColor(value);
-}
+  // --- ROOM 2 ---
+  else if(topic === 'ono_air_2026/status/r2/led1'){
+    document.getElementById('r2_led1').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r2/led2'){
+    document.getElementById('r2_led2').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r2/led3'){
+    document.getElementById('r2_led3').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+  else if(topic === 'ono_air_2026/status/r2/led4'){
+    document.getElementById('r2_led4').innerHTML = value === 'ON' ? '🟢 ON' : '🔴 OFF';
+  }
+
+  // --- TEMPERATURES ---
+  else if(topic === 'ono_air_2026/sensor/r1/temp'){
+    document.getElementById('temp_r1').innerHTML = value + ' °C';
+    setRoomColor('air1', value);
+  }
+  else if(topic === 'ono_air_2026/sensor/r2/temp'){
+    document.getElementById('temp_r2').innerHTML = value + ' °C';
+    setRoomColor('air2', value);
+  }
+  else if(topic === 'ono_air_2026/sensor/gateway/temp'){
+    document.getElementById('temp_gateway').innerHTML = value + " °C";
+    setGatewayColor(value);
+  }
 
 });
 
 client.on('error', () => {
-document.getElementById('status').innerHTML = "🔴 MQTT Error";
+  document.getElementById('status').innerHTML = "🔴 MQTT Error";
 });
 
 client.on('offline', () => {
-document.getElementById('status').innerHTML = "🟠 Offline";
+  document.getElementById('status').innerHTML = "🟠 Offline";
 });
 
 client.on('reconnect', () => {
-document.getElementById('status').innerHTML = "🟡 Reconnecting...";
+  document.getElementById('status').innerHTML = "🟡 Reconnecting...";
 });
 
 function sendCmd(cmd){
-client.publish('ono_air_2026/cmd', cmd);
+  client.publish('ono_air_2026/cmd', cmd);
 }
 
 function setRoomColor(roomId, temp) {
