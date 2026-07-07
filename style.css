@@ -58,7 +58,7 @@ border-bottom: 1px solid rgba(255,255,255,0.1);
 padding-bottom: 10px;
 }
 
-/* เพิ่มคลาสจัดแถวสำหรับปุ่มควบคุมและสถานะ */
+/* คลาสจัดแถวสำหรับปุ่มควบคุมและสถานะ */
 .control-group {
 background: rgba(0, 0, 0, 0.15);
 padding: 12px 15px;
@@ -83,13 +83,39 @@ font-weight:bold;
 margin:5px 0;
 }
 
+/* 📊 ปรับปรุงส่วนแสดงผลเซนเซอร์ด้านล่างของแต่ละบอร์ด (จัด Layout ใหม่สำหรับ Temp & Hum) */
+.sensor-display {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+margin-top: 20px;
+padding-top: 15px;
+border-top: 1px solid rgba(255,255,255,0.1);
+}
+
 .temp{
 display:block;
 text-align:center;
-font-size:40px;
+font-size:32px; /* ลดลงมาเล็กน้อยเพื่อให้สมดุลกับความชื้นเมื่อจอด้านล่างคู่กัน */
 font-weight:bold;
 color:#fbbf24;
-margin:20px 0 5px 0;
+margin:0;
+background: rgba(251, 191, 36, 0.1);
+padding: 10px;
+border-radius: 15px;
+}
+
+/* ➕ เพิ่มสไตล์การตกแต่งค่าความชื้นให้เข้าชุดกัน */
+.hum{
+display:block;
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#3b82f6;
+margin:0;
+background: rgba(59, 130, 246, 0.1);
+padding: 10px;
+border-radius: 15px;
 }
 
 .btns{
@@ -128,6 +154,7 @@ background:#1e293b;
 font-weight:bold;
 }
 
+/* ระบบเปลี่ยนสีตามสถานะอุณหภูมิ */
 .room.green {
   background: rgba(34, 197, 94, 0.25);
   border: 2px solid #22c55e;
@@ -143,10 +170,11 @@ font-weight:bold;
   border: 2px solid #ef4444;
 }
 
+/* 🖥️ ส่วนควบคุมกล่องแม่ Gateway */
 .gateway-box {
   text-align: center;
   margin-top: 15px;
-  padding: 10px 15px;
+  padding: 15px 15px;
   border-radius: 15px;
   background: rgba(255,255,255,0.08);
   border: 1px solid transparent;
