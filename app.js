@@ -21,13 +21,13 @@ client.on('connect', () => {
   client.subscribe('ono_air_2026/sensor/r2/temp');
   client.subscribe('ono_air_2026/sensor/gateway/temp');
 
+  // ➕ Subscribe ความชื้นเซนเซอร์ (เพิ่มเข้ามาใหม่)
+  client.subscribe('ono_air_2026/sensor/r1/humidity');
+  client.subscribe('ono_air_2026/sensor/r2/humidity');
+
   // Subscribe สถานะการเชื่อมต่อ (Online/Offline)
   client.subscribe('ono_air_2026/status/r1/connection');
   client.subscribe('ono_air_2026/status/r2/connection');
-
-  // ➕ Subscribe ความแรงสัญญาณ RSSI
-  client.subscribe('ono_air_2026/status/r1/rssi');
-  client.subscribe('ono_air_2026/status/r2/rssi');
 
 });
 
@@ -43,8 +43,8 @@ client.on('message', (topic, msg) => {
     } else {
       document.getElementById('r1_conn').innerHTML = '🔴 Offline';
       document.getElementById('r1_conn').style.color = '#ef4444';
-      document.getElementById('r1_rssi').innerHTML = '-- dBm'; // หลุดแล้วให้รีเซ็ตค่าสัญญาณ
-      document.getElementById('r1_rssi').style.color = '#666';
+      document.getElementById('temp_r1').innerHTML = '-- °C'; // หลุดแล้วเคลียร์ค่าเซนเซอร์
+      document.getElementById('hum_r1').innerHTML = '-- %RH';
     }
   }
   else if (topic === 'ono_air_2026/status/r2/connection') {
@@ -54,25 +54,9 @@ client.on('message', (topic, msg) => {
     } else {
       document.getElementById('r2_conn').innerHTML = '🔴 Offline';
       document.getElementById('r2_conn').style.color = '#ef4444';
-      document.getElementById('r2_rssi').innerHTML = '-- dBm'; // หลุดแล้วให้รีเซ็ตค่าสัญญาณ
-      document.getElementById('r2_rssi').style.color = '#666';
+      document.getElementById('temp_r2').innerHTML = '-- °C'; // หลุดแล้วเคลียร์ค่าเซนเซอร์
+      document.getElementById('hum_r2').innerHTML = '-- %RH';
     }
-  }
-
-  // --- ➕ ตรวจจับระดับความแรงสัญญาณ LoRa (RSSI) ---
-  else if (topic === 'ono_air_2026/status/r1/rssi') {
-    const rssiVal = parseInt(value);
-    document.getElementById('r1_rssi').innerHTML = value + ' dBm';
-    if(rssiVal >= -85) document.getElementById('r1_rssi').style.color = '#22c55e';      // เขียว สัญญาณดีมาก
-    else if(rssiVal >= -100) document.getElementById('r1_rssi').style.color = '#f59e0b'; // ส้ม สัญญาณปานกลาง
-    else document.getElementById('r1_rssi').style.color = '#ef4444';                     // แดง สัญญาณวิกฤต
-  }
-  else if (topic === 'ono_air_2026/status/r2/rssi') {
-    const rssiVal = parseInt(value);
-    document.getElementById('r2_rssi').innerHTML = value + ' dBm';
-    if(rssiVal >= -85) document.getElementById('r2_rssi').style.color = '#22c55e';
-    else if(rssiVal >= -100) document.getElementById('r2_rssi').style.color = '#f59e0b';
-    else document.getElementById('r2_rssi').style.color = '#ef4444';
   }
 
   // --- ROOM 1 (LED1 - LED4) ---
@@ -115,6 +99,14 @@ client.on('message', (topic, msg) => {
   else if(topic === 'ono_air_2026/sensor/gateway/temp'){
     document.getElementById('temp_gateway').innerHTML = value + " °C";
     setGatewayColor(value);
+  }
+
+  // --- ➕ HUMIDITY (ระบบดักรับค่าความชื้นใหม่) ---
+  else if(topic === 'ono_air_2026/sensor/r1/humidity'){
+    document.getElementById('hum_r1').innerHTML = value + ' %RH';
+  }
+  else if(topic === 'ono_air_2026/sensor/r2/humidity'){
+    document.getElementById('hum_r2').innerHTML = value + ' %RH';
   }
 
 });
