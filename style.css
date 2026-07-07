@@ -207,3 +207,56 @@ font-weight:bold;
   background: rgba(239, 68, 68, 0.15);
   border: 2px solid #ef4444;
 }
+
+/* ==========================================
+   ➕ ระบบรองรับ Light Mode (ธีมสว่าง)
+   ========================================== */
+body.light-mode {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #1e293b;
+}
+
+body.light-mode .header h1 {
+    color: #0f172a;
+}
+
+body.light-mode .header p {
+    color: #64748b;
+}
+
+/* ปรับสีกล่องในโหมดสว่าง */
+body.light-mode .room, 
+body.light-mode .gateway-box {
+    background: rgba(255, 255, 255, 0.85);
+    color: #1e293b;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+body.light-mode .room h2 {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .control-group {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .control-group .label {
+    color: #64748b;
+}
+
+body.light-mode #status {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+}
+
+/* ล็อคสีพื้นหลังกล่องสถานะอุณหภูมิความชื้นให้ชัดเจนในโหมดสว่าง */
+body.light-mode .temp {
+    background: rgba(251, 191, 36, 0.15);
+    color: #b45309; /* ส้มเข้มขึ้นให้อ่านง่าย */
+}
+
+body.light-mode .hum {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8; /* ฟ้าเข้มขึ้นให้อ่านง่าย */
+}
