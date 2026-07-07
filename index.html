@@ -16,17 +16,18 @@
 <h1>🌡 Smart Air Control</h1>
 <p>Room Monitoring System</p>
 </div>
+
 <div class="gateway-box" id="gatewayBox">
-  <h2>🌡 อุณหภูมิห้องขณะนี้</h2>
+  <h2>🖥️ ศูนย์ควบคุมกลาง (Gateway)</h2>
   <div class="gateway-temp">
-    <span id="temp_gateway">--</span> 
+    <span>อุณหภูมิ: <strong id="temp_gateway">--</strong> °C</span>
   </div>
 </div><br>
+
 <div class="rooms">
 
 <div class="room" id="air1">
 <h2>ตัวที่ 1 (R1) <span id="r1_conn" style="font-size:16px; margin-left:10px; color:#ef4444; font-weight:normal;">🔴 Offline</span></h2>
-<div style="font-size: 14px; color: #666; margin-bottom: 15px;">ความแรงสัญญาณ: <span id="r1_rssi" style="font-weight: bold;">-- dBm</span></div>
 
 <div class="control-group">
   <span class="label">LED 1:</span>
@@ -64,12 +65,14 @@
   </div>
 </div>
 
-<div class="temp" id="temp_r1">-- °C</div>
+<div class="sensor-display">
+  <div class="temp" id="temp_r1">-- °C</div>
+  <div class="hum" id="hum_r1" style="font-size: 24px; color: #3b82f6; font-weight: bold; margin-top: 5px;">-- %RH</div>
+</div>
 </div>
 
 <div class="room" id="air2">
 <h2>ตัวที่ 2 (R2) <span id="r2_conn" style="font-size:16px; margin-left:10px; color:#ef4444; font-weight:normal;">🔴 Offline</span></h2>
-<div style="font-size: 14px; color: #666; margin-bottom: 15px;">ความแรงสัญญาณ: <span id="r2_rssi" style="font-weight: bold;">-- dBm</span></div>
 
 <div class="control-group">
   <span class="label">LED 1:</span>
@@ -107,7 +110,10 @@
   </div>
 </div>
 
-<div class="temp" id="temp_r2">-- °C</div>
+<div class="sensor-display">
+  <div class="temp" id="temp_r2">-- °C</div>
+  <div class="hum" id="hum_r2" style="font-size: 24px; color: #3b82f6; font-weight: bold; margin-top: 5px;">-- %RH</div>
+</div>
 </div>
 
 </div>
