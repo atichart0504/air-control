@@ -1,12 +1,13 @@
-body{
-margin:0;
-font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    /* เปลี่ยนเป็นไล่เฉดสีน้ำเงินมืดมิด ตัดด้วยสีน้ำเงินอินดิโก */
+    background: linear-gradient(135deg, #020617, #0f172a, #1e1b4b); 
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container{
