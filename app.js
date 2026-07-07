@@ -134,3 +134,23 @@ function setGatewayColor(temp) {
   else if (t >= 23.1 && t <= 25.9) box.classList.add("yellow");
   else if (t >= 26) box.classList.add("red");
 }
+
+// ฟังก์ชันสำหรับสลับโหมด มืด/สว่าง
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('theme-toggle');
+  
+  // สลับคลาส light-mode
+  body.classList.toggle('light-mode');
+  
+  // เช็คสถานะปัจจุบันเพื่อเปลี่ยนข้อความบนปุ่ม
+  if (body.classList.contains('light-mode')) {
+    btn.innerHTML = "🌙 Dark Mode";
+    btn.style.background = "#0f172a";
+    btn.style.color = "#ffffff";
+  } else {
+    btn.innerHTML = "☀️ Light Mode";
+    btn.style.background = "#334155";
+    btn.style.color = "#ffffff";
+  }
+}
